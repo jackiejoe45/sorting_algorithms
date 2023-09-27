@@ -1,4 +1,5 @@
 #include "sort.h"
+
 /**
  * bitonic_sort - sorts an array of integers in ascending order using the
  * Bitonic sort algorithm
@@ -11,45 +12,50 @@ void bitonic_sort(int *array, size_t size)
 {
 	if (array == NULL || size < 2)
 		return;
-	bitonic_recur(array, 0, size, size, 1);
+	bitonic_recur(array, 0, size, 1);
 }
+
 /**
  * bitonic_recur - recursive function for bitonic sort
  * @array: array to be sorted
  * @low: low index
  * @size: size of the array
- * @dir: direction
- * @size_t: size of the array
+ * @dir: direction (1 for UP, 0 for DOWN)
+ *
+ * This function recursively divides the array and merges it in a bitonic manner.
  *
  * Return: void
  */
-void bitonic_recur(int *array, size_t low, size_t size, size_t size_t, int dir)
+void bitonic_recur(int *array, size_t low, size_t size, int dir)
 {
 	size_t k = size / 2;
 
 	if (size < 2)
 		return;
-	printf("Merging [%lu/%lu] (%s):\n", size, size_t, dir == 1 ? "UP" : "DOWN");
+	printf("Merging [%lu] (%s):\n", size, dir == 1 ? "UP" : "DOWN");
 	print_array(array + low, size);
-	bitonic_sort_recursive(array, low, k, size_t, 1);
-	bitonic_sort_recursive(array, low + k, k, size_t, 0);
-	bitonic_merge(array, low, size, size_t, dir);
-	printf("Result [%lu/%lu] (%s):\n", size, size_t, dir == 1 ? "UP" : "DOWN");
+	bitonic_recur(array, low, k, 1);
+	bitonic_recur(array, low + k, k, 0);
+	bitonic_merge(array, low, size, dir);
+	printf("Result [%lu] (%s):\n", size, dir == 1 ? "UP" : "DOWN");
 	print_array(array + low, size);
 }
+
 /**
  * bitonic_merge - merge function for bitonic sort
  * @array: array to be sorted
  * @low: low index
  * @size: size of the array
- * @size_t: size of the array
- * @dir: direction
+ * @dir: direction (1 for UP, 0 for DOWN)
+ *
+ * This function recursively merges two bitonic sequences.
  *
  * Return: void
  */
-void bitonic_merge(int *array, size_t low, size_t size, size_t size_t, int dir)
+void bitonic_merge(int *array, size_t low, size_t size, int dir)
 {
-	size_t i, k = size / 2;
+	size_t i;
+	size_t k = size / 2;
 
 	int tmp;
 
@@ -64,8 +70,7 @@ void bitonic_merge(int *array, size_t low, size_t size, size_t size_t, int dir)
 			array[i + k] = tmp;
 		}
 	}
-	bitonic_merge(array, low, k, size_t, dir);
-	bitonic_merge(array, low + k, k, size_t, dir);
+	bitonic_merge(array, low, k, dir);
+	bitonic_merge(array, low + k, k, dir);
 }
-
 
